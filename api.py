@@ -16,6 +16,13 @@ class User(db.Model):
     password = db.Column(db.Boolean)
     admin = db.Column(db.Boolean)
     
+# Tabela de tarefas
+class Todo(db.Model):
+    id = id.Column(db.Integer, primary_key=True)
+    text = id.Column(db.String(50))
+    complete = db.Column(db.Boolean)
+    user_id = db.Column(db.Integer)
+    
     
 if __name__ == "__main__":
     app.run(debug=True)
