@@ -8,7 +8,7 @@ from functools import wraps
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY']='THISISSECRET'
+app.config['SECRET_KEY'] = 'deveserSecreto'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/sqlite/todo.db'
 
 db = SQLAlchemy(app)
@@ -149,21 +149,23 @@ def delete_user(current_user, public_id):
 @app.route('/login')
 def login():
     auth = request.authorization
-    
+
     if not auth or not auth.username or not auth.password:
         return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
-    
+
     user = User.query.filter_by(name=auth.username).first()
-    
+
     if not user:
         return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
     if check_password_hash(user.password, auth.password):
-        token = jwt.encode({'public_id': user.public_id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
-        
+        token_payload = {'public_id': user.public_id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}
+        token = jwt.encode(token_payload, app.config['SECRET_KEY'], algorithm='HS256')
+
         return jsonify({'token': token})
-    
+
     return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
+
     
     
 if __name__ == "__main__":
