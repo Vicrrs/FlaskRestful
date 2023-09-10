@@ -6,7 +6,9 @@ import jwt
 import datetime
 from functools import wraps
 
+
 app = Flask(__name__)
+
 
 app.config['SECRET_KEY'] = 'deveserSecreto'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/sqlite/todo.db'
